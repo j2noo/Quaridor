@@ -1,6 +1,7 @@
 import {Player} from "./Player.js";
 import {Board, positionObstacleOnBoard, positionObstacleCenter} from "./Board.js";
 import {Computer} from "./Computer.js";
+//import wait from "waait"; //비동기 지연 라이브러리
 
 
 export let board = new Board();
@@ -83,9 +84,9 @@ export function gameStartComputer(){ //1인용플레이
   player1.initElem('black'); //elem을 토큰이미지요소로
   player2.initElem('white');
 
-  document.querySelector(player1.getTableId()).append(player1.getElem());
-  document.querySelector(player2.getTableId()).append(player2.getElem());
-  
+  document.querySelector(player1.getTableId()).append(player1.getElem()); //(8,4)에 이미지 추가
+  document.querySelector(player2.getTableId()).append(player2.getElem()); //(0,4)에 이미지 추가
+
   initPlayerEvents('vsComputer');
   initObstacleEvents('vsComputer');
 
@@ -95,37 +96,21 @@ export function gameStartComputer(){ //1인용플레이
   changeTurn(getNowTurn(),getNextTurn());
   //changeTurn(player2,player1);
 }
+
 export function changeTurn(before,after){
+  console.log('└----------'+getNowTurn().getId()+' 턴 종료----------┘');
   setNowTurn(after);
   setNextTurn(before);
 
   document.getElementById(before.getName()+'info').style.backgroundColor='';
   document.getElementById(after.getName()+'info').style.backgroundColor='red'; //현재턴표시
-  console.log('----------'+getNowTurn().getId()+' 턴 시작----------');
+  console.log('┌----------'+getNowTurn().getId()+' 턴 시작----------┐');
 
   let beforeObstacles=document.querySelectorAll('.'+before.getName()+'Obstacle');
   setDisabled(before.getElem());  //이전 플레이어의 토큰 이미지 이벤트 비활성화
   for(let elem of beforeObstacles){
     setDisabled(elem); //이전플레이어 장애물 이벤트 비활성화
   }
-
-  if(getNowTurn().getId()=='computer'){ //컴퓨터 차례
-    let computerChoice = player2.getComputerChoice(board,player1,player2);
-    //sleep(1000);
-    if(computerChoice.select == 'move'){ //움직임 존재
-      moveTo(getNowTurn().getPos(), computerChoice, getNowTurn()); 
-    }
-    else if(computerChoice.select == 'obs') { //장애물 설치
-      console.log('장애물설치');
-      //제일 앞에서 아무 장애물 이미지요소 가져옴
-      let imgId=document.querySelector('.player2Obstacle').id;
-     
-      setObstacleTo(computerChoice,imgId);
-    }
-    changeTurn(getNowTurn(),getNextTurn()); //재귀스택?
-    return;
-  }
-  
   let afterObstacles=document.querySelectorAll('.'+after.getName()+'Obstacle');
   for(let elem of afterObstacles){
     //if(elem.dataset.isPositioned=='true') { continue; } // 이미 놓인 장애물은 건들지마
@@ -134,6 +119,28 @@ export function changeTurn(before,after){
   setAbled(after.getElem());      //현재 플레이어의 토큰 이미지 이벤트 비활성화
 
   
+  const funcComputerLogicDelay = async (time) => {
+    await sleep(time); //time ms 후 실행
+    console.log('Do something...')
+    let computerChoice = player2.getComputerChoice(board,player1,player2);
+    if(computerChoice.select == 'move'){ //움직임 존재
+      moveTo(getNowTurn().getPos(), computerChoice, getNowTurn()); 
+    }
+    else if(computerChoice.select == 'obs') { //장애물 설치
+      console.log('장애물설치');
+      document.querySelector('.player2Obstacle').remove(); //앞에서 하나 지움
+      setObstacleTo(computerChoice);
+    }
+    changeTurn(getNowTurn(),getNextTurn()); //재귀스택?
+    return;
+    function sleep(t){
+      return new Promise(resolve=>setTimeout(resolve,t));
+    }
+  }
+  
+  if(getNowTurn().getId()=='computer'){ //컴퓨터 차례
+    funcComputerLogicDelay(500);
+  }
 }
 function moveTo(before, after, who){
   console.log(who.getColor()+' move '+before.row+before.col+' to ' + after.row+after.col);
@@ -291,7 +298,7 @@ export function dropPlayer(event){
   console.log(`player2은 ${leftDest2}번 만에 도착 가능합니다`);
   
   board.checkWin(getNowTurn());
-  console.log('---------'+getNowTurn().getName()+' 턴 종료---------');
+  //console.log('---------'+getNowTurn().getName()+' 턴 종료---------');
   changeTurn(getNowTurn(),getNextTurn());
  
 }
@@ -359,7 +366,7 @@ export function dropObstacle(event){ //obstacle board unit에 부여
   
   setObstacleTo(dropObstacleInfo);
   
-  console.log('---------'+getNowTurn().getName()+' 턴 종료---------');
+  //console.log('---------'+getNowTurn().getName()+' 턴 종료---------');
   changeTurn(getNowTurn(),getNextTurn());
 }
 export function clickObstacle(event){ //obstacle unit에 부여

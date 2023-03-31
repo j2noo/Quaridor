@@ -29,9 +29,22 @@ export function createModalBuffering(){
   modal.className='buffering';
   //+modal.className='hidden';
   i.className='fa-solid fa-magnifying-glass fa-bounce';
+  i.className='fa-regular fa-face-rolling-eyes fa-beat-fade';
   
   modal.append(i);
  
   document.body.append(modal);
   //modal.classList.add('hidden');
+}
+export function createModalWinner(){
+  let modal=document.createElement('div');
+  let winnerBox=document.createElement('div');
+
+  modal.className='winner';
+  winnerBox.className='winnerXox';
+
+
+  modal.append(winnerBox);
+  document.body.append(modal);
+
 }

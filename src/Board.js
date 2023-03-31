@@ -256,18 +256,10 @@ export class Board{
 		}
 		checkWin(player){
 			//console.log(player);
-			if(player.getName()=='player1'){
-				if(player.getPos().row==0){
-					alert('player1 win!');
-				}
-			}
-			else if(player.getName()=='player2'){
-				if(player.getPos().row==8){
-					alert(`${player.getId()} win!`);
-				}
-			}
-			else {
-				console.log('이거아니다나오면안돼ㅐㅔ');
+			if((player.getName()=='player1' && player.getPos().row==0)
+			 	||(player.getName()=='player2' && player.getPos().row==8)){
+					document.querySelector('.winner').style.display="flex";
+					document.querySelector('.winner').innerText=`승자는 ${player.getId()}입니다!`
 			}
 		}
 }

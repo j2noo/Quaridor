@@ -35,9 +35,13 @@ let dragPlayerInfo= { //드래그 중인 플레이어 정보
     col : null,
   },
   imgId : null,
-  possibleInfo : null,
-  coloringBoard(color) {
+  possiblePlayerBoard : [],
+  coloringEnterBoard(color) {
     document.getElementById('p'+this.after.row+this.after.col).style.backgroundColor=color; //색 설정
+  },
+  coloringPossibleBoard(color) {
+    for(let pos of this.possiblePlayerBoard)
+    document.getElementById('p'+pos.row+pos.col).style.backgroundColor=color; //색 설정
   },
 }
 
@@ -139,7 +143,6 @@ function moveTo(before, after, who){
 
   let playerBoardId='p'+after.row+after.col;
   document.getElementById(playerBoardId).append(imgElem);
-  //board.printPlayerBoardArr();
 }
 function setObstacleTo(pos){ //장애물을 옮기는 함수
   
@@ -221,10 +224,11 @@ function initObstacleEvents(gameMode){
 export function dragenterPlayer(event){
   dragPlayerInfo.after.row = +this.dataset.row;
   dragPlayerInfo.after.col = +this.dataset.col;
-  dragPlayerInfo.coloringBoard('yellow');
+  dragPlayerInfo.coloringEnterBoard('red');
 }
 export function dragleavePlayer(event){
-  dragPlayerInfo.coloringBoard('');
+  dragPlayerInfo.coloringEnterBoard('');
+  dragPlayerInfo.coloringPossibleBoard("yellow"); //가능한 위치 표시
 }
 export function dragstartPlayer(event){  //플레이어를 드래그 시작하면, 플레이어 칸에 이벤트 추가
   dragPlayerInfo.before.row = getNowTurn().getPos().row;
@@ -240,8 +244,23 @@ export function dragstartPlayer(event){  //플레이어를 드래그 시작하�
   }
 
   showPossiblePlayerPos(); //플레이어가 이동할 수 있는 위치를 알려줌
-  function showPossiblePlayerPos() {
 
+  function showPossiblePlayerPos() {
+    const dy=[-1,-1,-1,0,1,1,1,0,-2,0,2,0]; //대각선1칸 + 상하좌우2칸씩
+    const dx=[-1,0,1,1,1,0,-1,-1,0,2,0,-2]; //대각선1칸 + 상하좌우2칸씩
+    dragPlayerInfo.possiblePlayerBoard=[];
+
+    for(let i=0; i<12;i++){
+      const newPos = {
+        row : dragPlayerInfo.before.row+dy[i],
+        col : dragPlayerInfo.before.col+dx[i],
+      }
+      if(board.isPossibleMove(dragPlayerInfo.before,newPos,0)){ //가능한 움직임 확인, 출력없이
+        dragPlayerInfo.possiblePlayerBoard.push(newPos);
+      }
+    }
+    
+    dragPlayerInfo.coloringPossibleBoard("yellow");
   }
 }
 export function dragendPlayer(event){
@@ -249,6 +268,7 @@ export function dragendPlayer(event){
   for(let elem of playerBoardUnits){ // 플레이어보드 이벤트 열기
     setDisabled(elem);
   }
+  dragPlayerInfo.coloringPossibleBoard(""); //가능한 위치 표시 원복
 
 }
 export function dragoverPlayer(event){
@@ -257,7 +277,7 @@ export function dragoverPlayer(event){
 export function dropPlayer(event){
   event.preventDefault();
 
-  dragPlayerInfo.coloringBoard('');
+  dragPlayerInfo.coloringEnterBoard('');
   if(!board.isPossibleMove(dragPlayerInfo.before,dragPlayerInfo.after,0)){ //불가능한 움직임
     return;
   }
@@ -271,7 +291,7 @@ export function dropPlayer(event){
   console.log(`player2은 ${leftDest2}번 만에 도착 가능합니다`);
   
   board.checkWin(getNowTurn());
-  console.log('---'+getNowTurn().getName()+' 턴 종료---');
+  console.log('---------'+getNowTurn().getName()+' 턴 종료---------');
   changeTurn(getNowTurn(),getNextTurn());
  
 }
@@ -283,9 +303,11 @@ export function dragstartObstacle(event){ //obstacle unit에 부여
   for(let elem of playerBoardUnits){ //장애물 이동중에는 플레이어보드 이벤트 막음
     setDisabled(elem);
   }
+  setDisabled(getNowTurn().getElem()); //img요소의 pointer-events도 막지 않으면 자식요소(boardUnit)으로 버블링발생
+  
   let obstacleBoardUnits = document.querySelectorAll('.obstacleBoardUnit'); //장애물 보드 유닛
-  for(let elem of obstacleBoardUnits){ //플레이어이동중에는 장애물유닛 이벤트 막음
-    if(elem.dataset.dir=='none')
+  for(let elem of obstacleBoardUnits){ //장애물 이동중에는 장애물 보드 유닛 이벤트 열기
+    if(elem.dataset.dir=='none') //장애물이 설치된 보드는 이벤트 열면 안됨
       setAbled(elem);
   }
 }
@@ -318,14 +340,14 @@ export function dragleaveObstacle(event){ //obstacle board unit에 부여
 }
 export function dragendObstacle(event){ //obstacle unit에 부여 //미사용?
   let obstacleBoardUnits = document.querySelectorAll('.obstacleBoardUnit'); //장애물 보드 유닛
-  for(let elem of obstacleBoardUnits){ //플레이어이동중에는 장애물유닛 이벤트 막음
+  for(let elem of obstacleBoardUnits){ //장애물 이동이 끝나면 장애물유닛 이벤트 닫음
       setDisabled(elem);
   }
+  setAbled(getNowTurn().getElem()); //img요소의 pointer-events도 막지 않으면 자식요소(boardUnit)으로 버블링발생. 다시 열어줌
 }
 export function dragoverObstacle(event){ //obstacle board unit에 부여
   event.preventDefault(); 
 }
-
 export function dropObstacle(event){ //obstacle board unit에 부여
   event.preventDefault();
   //console.log(dropObstacleInfo.possibleInfo); //보고 지우자

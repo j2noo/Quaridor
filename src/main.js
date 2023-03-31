@@ -1,6 +1,6 @@
 import * as creating from "./createBoard.js";
 import { gameStart, gameStartComputer } from "./GameManager.js";
-import { createModal } from "./modal.js";
+import { createModal, createModalBuffering } from "./modal.js";
 
 creating.createContainer();
 creating.createPlayerInfo('player2','white');
@@ -10,6 +10,9 @@ creating.createObstacleInfo('player1');
 creating.createPlayerInfo('player1','black');
 
 createModal();
+createModalBuffering();
+document.querySelector('.buffering').style.display="none"; //버퍼링모달창 숨김
+//document.querySelector('.buffering').style.display="flex";
 
 let btn1Elem=document.getElementById('btn1');
 let btn2Elem=document.getElementById('btn2');

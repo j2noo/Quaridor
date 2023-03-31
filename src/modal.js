@@ -22,3 +22,16 @@ export function createModal(){
   document.body.append(modal);
 
 }
+export function createModalBuffering(){
+  let modal=document.createElement('div');
+  let i=document.createElement('i');
+
+  modal.className='buffering';
+  //+modal.className='hidden';
+  i.className='fa-solid fa-magnifying-glass fa-bounce';
+  
+  modal.append(i);
+ 
+  document.body.append(modal);
+  //modal.classList.add('hidden');
+}

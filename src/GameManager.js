@@ -79,6 +79,8 @@ export function gameStartComputer(){ //1인용플레이
   document.querySelector('#player2info').innerHTML='<img src=./images/white.png alt="white"></img>Computer'; //위에 문구 바꿈
 
   document.querySelector('.modal').classList.add('hidden'); //모달창 종료
+  
+
   board.setPlayerBoardArr(player1.getPos(),player1.getPos(),player1); //playerBoard에 올려줌
   board.setPlayerBoardArr(player2.getPos(),player2.getPos(),player2); //playerBoard에 올려줌
   player1.initElem('black'); //elem을 토큰이미지요소로
@@ -120,9 +122,9 @@ export function changeTurn(before,after){
   setAbled(after.getElem());      //현재 플레이어의 토큰 이미지 이벤트 비활성화
 
   
-  const funcComputerLogicDelay = async (time) => {
+  const ComputerLogicDelay = async (time) => {
     await sleep(time); //time ms 후 실행
-    console.log('Do something...')
+    document.querySelector('.buffering').style.display="none"; //버퍼링모달창 숨김
     let computerChoice = player2.getComputerChoice(board,player1,player2);
     if(computerChoice.select == 'move'){ //움직임 존재
       moveTo(getNowTurn().getPos(), computerChoice, getNowTurn()); 
@@ -142,7 +144,8 @@ export function changeTurn(before,after){
   }
   
   if(getNowTurn().getId()=='computer'){ //컴퓨터 차례
-    funcComputerLogicDelay(500);
+    document.querySelector('.buffering').style.display="flex"; //버퍼링 보여주
+    ComputerLogicDelay(1000);
   }
 }
 function moveTo(before, after, who){

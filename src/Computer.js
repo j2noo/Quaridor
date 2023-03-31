@@ -42,16 +42,31 @@ export class Computer {
     return this._id;
   }
   getComputerChoice(board,player1,player2){
-
     let resultBruteforce = bruteforceObstacle(board,player1,player2);
+
     console.log(resultBruteforce);
-    if(resultBruteforce.awayFarthest<2){ //플레이어가 2칸이상멀어지지않음 -> 움직이기
+   
+    if(this._leftObstacles==0) { //장애물이 없는경우는 무조건 움직이기
+      return computerChooseMove();
+    }
+    else if(resultBruteforce.originPlayerDistance<=2){ //플레이어가 2칸이하로 남았으면 무조건 장애물
+      this._leftObstacles--;
+      console.log("남은 obs :"+this.getLeftObstacles());
+      return computerChooseObs();
+    }
+    else if(resultBruteforce.awayFarthest>2 ){ //2칸이상 멀어지게 할 수 있으면 장애물설치
+      this._leftObstacles--;
+      console.log("남은 obs :"+this.getLeftObstacles());
+      return computerChooseObs();
+    }
+    else return computerChooseMove();
+    function computerChooseMove() { //움직이는 경우
       //bfs 백트래킹하기
       let computerBefore = player2.getPos();
       let computerAfter = getMoveBFS(board,player1,player2);
       return computerAfter;
     }
-    else { //장애물 설치
+    function computerChooseObs()  { // 장애물을 설치하는 경우
       return {
         row : resultBruteforce.row,
         col : resultBruteforce.col,
@@ -59,7 +74,6 @@ export class Computer {
         select : 'obs',
       }
     }
-
     function bruteforceObstacle(board,player1,player2){ //모든 위치에 장애물을 놓아서 컴퓨터 vs 플레이어의 이동거리 증가 비교
       let obsBoard = board.getObstacleBoardArr();
       //console.log(player1,player2);
@@ -73,6 +87,7 @@ export class Computer {
         row : null,
         col : null,
         dir : null,
+        originPlayerDistance :originDistance.player,
       };
       //console.log('player1 원래 도달거리 '+ originDistance.player);
       //console.log('computer 원래 도달거리 '+ originDistance.computer);
@@ -123,10 +138,7 @@ export class Computer {
               bestChoice.dir = dirArr[k];
             }
           }
-          
-          
-          
-          
+
         }
       }
       return bestChoice;

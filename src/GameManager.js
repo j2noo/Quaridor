@@ -99,6 +99,7 @@ export function gameStartComputer(){ //1인용플레이
 
 export function changeTurn(before,after){
   console.log('└----------'+getNowTurn().getId()+' 턴 종료----------┘');
+  board.checkWin(getNowTurn());
   setNowTurn(after);
   setNextTurn(before);
 
@@ -128,9 +129,11 @@ export function changeTurn(before,after){
     }
     else if(computerChoice.select == 'obs') { //장애물 설치
       console.log('장애물설치');
-      document.querySelector('.player2Obstacle').remove(); //앞에서 하나 지움
+      let obsElem = document.querySelector('.player2Obstacle');
+      if(obsElem!==null) obsElem.remove();
       setObstacleTo(computerChoice);
     }
+
     changeTurn(getNowTurn(),getNextTurn()); //재귀스택?
     return;
     function sleep(t){
@@ -297,8 +300,8 @@ export function dropPlayer(event){
   console.log(`player1은 ${leftDest1}번 만에 도착 가능합니다`);
   console.log(`player2은 ${leftDest2}번 만에 도착 가능합니다`);
   
-  board.checkWin(getNowTurn());
-  //console.log('---------'+getNowTurn().getName()+' 턴 종료---------');
+  
+
   changeTurn(getNowTurn(),getNextTurn());
  
 }

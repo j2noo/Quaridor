@@ -263,7 +263,7 @@ export class Board{
 			}
 			else if(player.getName()=='player2'){
 				if(player.getPos().row==8){
-					alert('player2 win!');
+					alert(`${player.getId()} win!`);
 				}
 			}
 			else {

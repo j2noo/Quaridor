@@ -252,7 +252,7 @@ export class Board{
 		}
 }
 
-export function initBoardEvents(){
+export function initBoardEvents(){ //nono
 	let tds = document.querySelectorAll('td');
 	for(let elem of tds){
 		elem.onclick = function(event){

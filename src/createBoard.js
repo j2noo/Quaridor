@@ -75,7 +75,7 @@ function createObstacleElem(idx,id){
 	elem.className+=" "+id+'Obstacle';
 	elem.id=id+'ObstacleUnit'+idx;
 	elem.dataset.dir='vertical';
-	elem.dataset.isPositioned = false;
+	//elem.dataset.isPositioned = false;
 	elem.src="./images/obstacleVertical.png";
 	elem.alt='obs';
 	return elem;

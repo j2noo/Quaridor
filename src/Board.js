@@ -75,6 +75,7 @@ export class Board {
   }
   isPossibleObstacle(obsInfo, p1, p2, isPrint) {
     // 놓는곳, 좌우/위아래 같은장애물 조사
+    //d이미 장애물이 있는 곳은 좌표로 들어오지 않음
     let returnInfo = {
       isPossible: true,
       minDepth1: -1,
@@ -95,6 +96,7 @@ export class Board {
     if (isPrint) {
       console.log(`(${obsInfo.row}, ${obsInfo.col})에 ${obsInfo.dir} 장애물 설치`);
     }
+
     for (let i = 0; i < 3; i++) {
       let newRow = +obsInfo.row + direction[obsInfo.dir][i][0];
       let newCol = +obsInfo.col + direction[obsInfo.dir][i][1];
@@ -313,6 +315,28 @@ export class Board {
       //가능한 움직임 확인, 출력없이
       if (this.isPossibleMove(beforePos, newPos, 0)) {
         ret.push(newPos);
+      }
+    }
+    return ret;
+  }
+  getPossibleObstaclePos(p1, p2) {
+    let ret = [];
+
+    for (let i = 0; i < 8; i++) {
+      for (let j = 0; j < 8; j++) {
+        if (this._obstacleBoardArr[i][j] != -1)
+          //이미 장애물이 놓인 보드는 검사 안해요
+          continue;
+        for (let dir of ["vertical", "horizontal"]) {
+          let obsInfo = {
+            row: i,
+            col: j,
+            dir: dir,
+          };
+          if (this.isPossibleObstacle(obsInfo, p1, p2, 0).isPossible) {
+            ret.push(obsInfo);
+          }
+        }
       }
     }
     return ret;

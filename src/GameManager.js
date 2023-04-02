@@ -17,8 +17,7 @@ let dragObstacleInfo = {
   dir: null,
   imgId: null,
   adj: [], //장애물이 같이 놓이는 칸의 id정보
-
-  possibleInfo: null,
+  isPossible: null,
 };
 let dragPlayerInfo = {
   //드래그 중인 플레이어 정보
@@ -32,6 +31,7 @@ let dragPlayerInfo = {
   },
 
   possiblePlayerBoard: [],
+  possibleObstacleBoard: [],
 };
 
 function setNowTurn(player) {
@@ -115,6 +115,9 @@ export function changeTurn(before, after) {
   dragPlayerInfo.before.col = getNowTurn().getPos().col;
 
   dragPlayerInfo.possiblePlayerBoard = board.getPossiblePlayerPos(getNowTurn().getPos()); //플레이어가 이동할 수 있는 위치를 계산
+  dragPlayerInfo.possibleObstacleBoard = board.getPossibleObstaclePos(player1, player2); //플레이어가 놓을 수 있는 장애물의 위치를 계산 왜 표시안되지?
+
+  //console.log(dragPlayerInfo.possibleObstacleBoard);
 
   document.getElementById(before.getName() + "info").style.backgroundColor = "";
   document.getElementById(after.getName() + "info").style.backgroundColor = "red"; //현재턴표시
@@ -284,7 +287,7 @@ export function dropPlayerBoard(event) {
 export function dragstartObstacle(event) {
   dragObstacleInfo.dir = event.target.dataset.dir; //현재 드래그객체 방향
   dragObstacleInfo.imgId = event.target.id;
-  console.log(event.target);
+
   let playerBoardUnits = document.querySelectorAll(".playerBoardUnit"); //플레이어 보드 유닛
   //장애물 이동중에는 플레이어보드 이벤트 막음
   for (let elem of playerBoardUnits) {
@@ -304,19 +307,24 @@ export function dragenterObstacleBoard(event) {
   event.preventDefault();
   dragObstacleInfo.row = +this.dataset.row;
   dragObstacleInfo.col = +this.dataset.col;
+  dragObstacleInfo.isPossible = false;
 
-  dragObstacleInfo.possibleInfo = board.isPossibleObstacle(dragObstacleInfo, player1, player2, 0); //시간복잡도가....
-  if (dragObstacleInfo.possibleInfo.isPossible == false) {
-    //장애물을 못놓는 경우
-    return;
-  }
+  //장애물의 위치가 가능하다고 알려진 곳에만 놓을 수 있음
+  console.log(dragPlayerInfo.possibleObstacleBoard);
+  dragPlayerInfo.possibleObstacleBoard.forEach((info) => {
+    if (dragObstacleInfo.row == info.row && dragObstacleInfo.col == info.col && dragObstacleInfo.dir == info.dir) {
+      dragObstacleInfo.isPossible = true;
+    }
+  });
+  if (dragObstacleInfo.isPossible == false) return;
+
   board.getAdjObstacleBoardUnitId(dragObstacleInfo.row, dragObstacleInfo.col, dragObstacleInfo.dir).forEach((id) => {
     board.coloringObstacleBoard(id, "red");
   });
 }
 export function dragleaveObstacleBoard(event) {
   //장애물을 못놓는 경우
-  if (dragObstacleInfo.possibleInfo.isPossible == false) {
+  if (dragObstacleInfo.isPossible == false) {
     return;
   }
   board.getAdjObstacleBoardUnitId(dragObstacleInfo.row, dragObstacleInfo.col, dragObstacleInfo.dir).forEach((id) => {
@@ -340,11 +348,10 @@ export function dropObstacleBoard(event) {
   //obstacle board unit에 부여
   event.preventDefault();
 
-  dragObstacleInfo.possibleInfo = board.isPossibleObstacle(dragObstacleInfo, player1, player2, 1); //빼자시간복잡도
-  if (dragObstacleInfo.possibleInfo.isPossible == false) {
-    //장애물을 못놓는 경우
+  if (dragObstacleInfo.isPossible == false) {
     return;
   }
+
   document.getElementById(dragObstacleInfo.imgId).remove(); //애니메이션
   setObstaclePos(dragObstacleInfo);
 

@@ -52,13 +52,14 @@ export function gameStart(gameMode) {
   //2인용
   console.log(gameMode);
   document.querySelector(".modal").classList.add("hidden"); //모달창 종료
+  document.getElementById("player1info").classList.remove("bgAnimationBeforeStart");
+  document.getElementById("player2info").classList.remove("bgAnimationBeforeStart");
 
   if (gameMode == "vsComputer") {
     player2 = new Computer("player2", "computer", 0, 4);
     player2.initElem("computer");
     document.querySelector("#player2info>img").src = "./images/computerProfile.png";
     document.querySelector("#player2info>div").innerText = "Computer";
-    //document.querySelector("#player2info>img").innerHTML = '<img src=./images/computer.png alt="computer"></img>Computer'; //위에 문구 바꿈
   } else {
     player2 = new Player("player2", "white", 0, 4);
     player2.initElem("white");

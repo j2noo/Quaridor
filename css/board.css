@@ -1,3 +1,7 @@
+@font-face {
+  font-family: "netflixFont";
+  src: url("../BebasNeue.woff") format("woff");
+}
 body {
   margin: 0;
 }
@@ -81,12 +85,19 @@ td.obstacleBoardUnit {
     background-position: 0% 50%;
   }
 }
+.bgAnimationBeforeStart,
 .bgAnimation {
-  background: linear-gradient(137deg, #ff0000, #ffffff);
+  background: linear-gradient(137deg, #058db6, #ffffff, #14c47b);
   background-size: 400% 400%;
-  animation: bgFlow 2s ease infinite;
+  animation: bgFlow 3s ease infinite;
+}
+.bgAnimation {
+  background: linear-gradient(137deg, #b93939, #ffffff);
+  background-size: 400% 400%;
+  animation: bgFlow 3s ease infinite;
 }
 .playerInfo {
+  font-family: "netflixFont";
   display: inline;
   box-sizing: border-box;
   margin: auto;
@@ -98,7 +109,7 @@ td.obstacleBoardUnit {
   height: 100vh;
 }
 .playerInfo img {
-  width: 19vw;
+  width: 15vw;
   margin: auto;
   object-fit: contain;
   vertical-align: middle;

@@ -1,22 +1,51 @@
 export function createModal() {
   let modal = document.createElement("div");
-  let bg = document.createElement("div");
+  let textBox = document.createElement("span");
   let modalBox = document.createElement("div");
   let btn1 = document.createElement("button");
   let btn2 = document.createElement("button");
 
   modal.className = "modal";
-  bg.className = "bg";
+
+  textBox.className = "textBox";
+  let idx = 0;
+  for (let ch of "quoridor") {
+    let elem = document.createElement("span");
+    elem.innerHTML = ch;
+    elem.id = "id" + idx++;
+    textBox.append(elem);
+  }
+
   modalBox.className = "modalBox";
-  btn1.innerText = "vs Computer";
+
+  let elem = document.createElement("span");
+  elem.innerHTML = "vs<br>Computer";
+  btn1.append(elem);
+
+  let elem2 = document.createElement("span");
+  elem2.innerHTML = "vs<br>Player";
+  btn2.append(elem2);
+
   btn1.id = "btn1";
-  btn2.innerText = "vs Player";
   btn2.id = "btn2";
 
+  btn1.addEventListener("mouseenter", () => {
+    document.querySelector("#btn1 span").innerHTML = "<br>GO!";
+  });
+  btn1.addEventListener("mouseleave", () => {
+    document.querySelector("#btn1 span").innerHTML = "vs<br>Computer";
+  });
+  btn2.addEventListener("mouseenter", () => {
+    document.querySelector("#btn2 span").innerHTML = "<br>GO!";
+  });
+  btn2.addEventListener("mouseleave", () => {
+    document.querySelector("#btn2 span").innerHTML = "vs<br>Player";
+  });
+
+  modal.append(textBox);
   modalBox.append(btn1);
   modalBox.append(btn2);
 
-  modal.append(bg);
   modal.append(modalBox);
 
   document.body.append(modal);

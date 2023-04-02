@@ -1,3 +1,21 @@
+@import url("https://fonts.googleapis.com/css?family=Luckiest+Guy");
+@keyframes bounce {
+  100% {
+    top: -20px;
+    text-shadow: 0 1px 0 #ccc, 0 2px 0 #ccc, 0 3px 0 #ccc, 0 4px 0 #ccc, 0 5px 0 #ccc, 0 6px 0 #ccc, 0 7px 0 #ccc, 0 8px 0 #ccc, 0 9px 0 #ccc, 0 50px 25px rgba(0, 0, 0, 0.2);
+  }
+}
+@keyframes bgFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
 .modal {
   position: fixed;
   top: 0px;
@@ -7,46 +25,84 @@
   display: flex;
   justify-content: center;
   align-items: center;
-}
-.modal .bg {
-  width: 100%;
-  height: 100%;
   background-color: rgba(0, 0, 0, 0.6);
 }
+
 .modalBox {
-  position: absolute;
-  background-color: #fff;
-  width: 400px;
-  height: 250px;
+  /* background-color: #fff; */
+  height: 350px;
   top: 300px;
-  padding: 15px;
 }
+button {
+  width: 200px;
+  height: 250px;
+  margin: 30px;
+  border: 2px solid black;
+
+  font-family: "Luckiest Guy", cursive;
+  background-size: 400% 400%;
+  animation: bgFlow 2s ease infinite;
+  background-image: linear-gradient(137deg, #6abce2, hsl(41, 95%, 37%));
+  cursor: pointer;
+}
+
+.textBox {
+  font-family: "Luckiest Guy", cursive;
+  -webkit-font-smoothing: antialiased;
+  cursor: default;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100px;
+  margin: auto;
+  display: block;
+  text-align: center;
+}
+.textBox span,
+button span {
+  position: relative;
+  top: 20px;
+  display: inline-block;
+  animation: bounce 0.35s ease infinite alternate;
+  font-size: 10em;
+  color: #a87e0a;
+  text-shadow: 0 1px 0 #ccc, 0 2px 0 #ccc, 0 3px 0 #ccc, 0 4px 0 #ccc, 0 5px 0 #ccc, 0 6px 0 transparent, 0 7px 0 transparent, 0 8px 0 transparent, 0 9px 0 transparent, 0 10px 10px rgba(0, 0, 0, 0.4);
+}
+button span {
+  font-size: 35px;
+  top: 2px;
+  animation: bounce 0.9s ease-in infinite alternate;
+  text-shadow: 0 1px 0 #ccc, 0 1px 0 #ccc, 0 1.5px 0 #ccc, 0 2px 0 #ccc, 0 3px 0 #ccc, 0 2px 0 transparent, 0 3px 0 transparent, 0 4px 0 transparent, 0 5px 0 transparent, 0 1px 1px rgba(0, 0, 0, 0.4);
+  color: #0e24f0;
+}
+#id1 {
+  animation-delay: 0.05s;
+}
+#id2 {
+  -webkit-animation-delay: 0.1s;
+}
+
+#id3 {
+  -webkit-animation-delay: 0.15s;
+}
+
+#id4 {
+  -webkit-animation-delay: 0.2s;
+}
+#id5 {
+  -webkit-animation-delay: 0.25s;
+}
+#id6 {
+  -webkit-animation-delay: 0.3s;
+}
+#id7 {
+  -webkit-animation-delay: 0.35s;
+}
+
 .hidden {
   display: none;
 }
-.modal button {
-  width: 150px;
-  height: 200px;
-  margin: 20px;
-  font-size: 20px;
-}
-.buffering {
-  position: fixed;
-  top: 0px;
-  left: 0px;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(0, 0, 0, 0.1);
-  font-size: 4em;
-  z-index: 2233123213;
-}
-.buffering img {
-  width: 50%;
-  opacity: 0.5;
-}
+
 .winner {
   position: fixed;
   top: 0px;

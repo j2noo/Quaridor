@@ -87,8 +87,7 @@ function createObstacleElem(idx, id) {
 export function createPlayerInfo(id, color) {
   let elem = document.createElement("div");
   elem.id = id + "info";
-  elem.className = "playerInfo";
-  //elem.innerHTML = "<img src=./images/" + color + '.png alt="white"></img>' + id;
+  elem.className = "playerInfo bgAnimationBeforeStart";
 
   let playerNameElem = document.createElement("div");
   playerNameElem.innerText = id;

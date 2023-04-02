@@ -1,17 +1,11 @@
 import { Player } from "./Player.js";
-import {
-  Board,
-  positionObstacleOnBoard,
-  positionObstacleCenter,
-} from "./Board.js";
+import { Board } from "./Board.js";
 import { Computer } from "./Computer.js";
-//import wait from "waait"; //비동기 지연 라이브러리
+
 
 export let board = new Board();
 export let player1 = new Player("player1", "black", 8, 4);
 export let player2;
-//export let computer = new Computer("player2", "white", 0, 4);
-
 const OBS_COLOR = "#c9a85c";
 let _nowTurn = null;
 let _nextTurn = null;

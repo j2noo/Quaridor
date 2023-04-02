@@ -365,11 +365,16 @@ export function dropObstacleBoard(event) {
   changeTurn(getNowTurn(), getNextTurn());
 }
 export function clickObstacle(event) {
+  console.log(event.target);
   if (event.target.dataset.dir == "vertical") {
-    event.target.src = "./images/obstacleHorizontal.png";
+    //event.target.src = "./images/obstacleHorizontal.png";
     event.target.dataset.dir = "horizontal";
+    event.target.classList.add("obsHorizontal");
+    event.target.classList.remove("obsVertical");
   } else {
-    event.target.src = "./images/obstacleVertical.png";
+    //event.target.src = "./images/obstacleVertical.png";
     event.target.dataset.dir = "vertical";
+    event.target.classList.add("obsVertical");
+    event.target.classList.remove("obsHorizontal");
   }
 }

@@ -3,11 +3,11 @@ import { gameStart, gameStartComputer } from "./GameManager.js";
 import { createModal, createModalBuffering, createModalWinner } from "./modal.js";
 
 creating.createContainer();
-creating.createPlayerInfo("player2", "white");
+//creating.createPlayerInfo("player2", "white");
 creating.createObstacleInfo("player2");
 creating.createBoard();
+//creating.createPlayerInfo("player1", "black");/
 creating.createObstacleInfo("player1");
-creating.createPlayerInfo("player1", "black");
 
 createModal();
 //createModalBuffering();

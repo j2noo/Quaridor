@@ -88,6 +88,16 @@ export function createPlayerInfo(id, color) {
   let elem = document.createElement("div");
   elem.id = id + "info";
   elem.className = "playerInfo";
+  //elem.innerHTML = "<img src=./images/" + color + '.png alt="white"></img>' + id;
+
+  let playerNameElem = document.createElement("div");
+  playerNameElem.innerText = id;
+
+  let PlayerImgElem = document.createElement("img");
+  PlayerImgElem.src = "./images/playerProfile" + color + ".png";
+
+  elem.append(playerNameElem);
+  elem.append(PlayerImgElem);
+
   document.querySelector("#container").append(elem);
-  elem.innerHTML = "<img src=./images/" + color + '.png alt="white"></img>' + id;
 }

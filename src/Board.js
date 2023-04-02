@@ -1,5 +1,5 @@
 import { Queue } from "./FastQueue.js";
-const OBS_COLOR = "#c9a85c";
+const OBS_COLOR = "#a56c21";
 export class Board {
   constructor() {
     this._playerBoardArr = Array.from(Array(9), () => Array(9).fill(0));

@@ -56,8 +56,9 @@ export function gameStart(gameMode) {
   if (gameMode == "vsComputer") {
     player2 = new Computer("player2", "computer", 0, 4);
     player2.initElem("computer");
-
-    document.querySelector("#player2info").innerHTML = '<img src=./images/computer.png alt="computer"></img>Computer'; //위에 문구 바꿈
+    document.querySelector("#player2info>img").src = "./images/computerProfile.png";
+    document.querySelector("#player2info>div").innerText = "Computer";
+    //document.querySelector("#player2info>img").innerHTML = '<img src=./images/computer.png alt="computer"></img>Computer'; //위에 문구 바꿈
   } else {
     player2 = new Player("player2", "white", 0, 4);
     player2.initElem("white");
@@ -120,7 +121,7 @@ export function changeTurn(before, after) {
   //console.log(dragPlayerInfo.possibleObstacleBoard);
 
   document.getElementById(before.getName() + "info").style.backgroundColor = "";
-  document.getElementById(after.getName() + "info").style.backgroundColor = "red"; //현재턴표시
+  document.getElementById(after.getName() + "info").style.backgroundColor = "rgb(250 170 170)"; //현재턴표시
   console.log("┌----------" + getNowTurn().getId() + " 턴 시작----------┐");
 
   let beforeObstacles = document.querySelectorAll("." + before.getName() + "Obstacle");
@@ -137,8 +138,8 @@ export function changeTurn(before, after) {
 
   const ComputerLogicDelay = async (computerChoice, time) => {
     await sleep(time); //time ms 후 실행
-    document.getElementById("imgcomputer").style.filter = "none";
-    document.getElementById("imgcomputer").src = "./images/computer.png";
+
+    document.querySelector("#player2info>img").src = "./images/computerProfile.png";
     if (computerChoice.select == "move") {
       //움직임 존재
       moveTo(getNowTurn().getPos(), computerChoice, getNowTurn());
@@ -161,11 +162,11 @@ export function changeTurn(before, after) {
   if (getNowTurn().getId() == "computer") {
     //컴퓨터 차례
     let computerChoice = player2.getComputerChoice(board, player1, player2);
-    document.getElementById("imgcomputer").src = "./images/buffering.jpg";
+
     if (computerChoice.select == "move") {
-      document.getElementById("imgcomputer").style.filter = "none";
+      document.querySelector("#player2info>img").src = "./images/computerProfile2.png";
     } else {
-      document.getElementById("imgcomputer").style.filter = "invert(80%)";
+      document.querySelector("#player2info>img").src = "./images/computerProfile3.png";
     }
 
     ComputerLogicDelay(computerChoice, 1000);
@@ -243,7 +244,7 @@ export function dragenterPlayerBoard(event) {
 export function dragleavePlayerBoard(event) {
   board.coloringOneBoard("p", dragPlayerInfo.after, "");
   dragPlayerInfo.possiblePlayerBoard.forEach((pos) => {
-    board.coloringOneBoard("p", pos, "yellow");
+    board.coloringOneBoard("p", pos, "rgb(213 252 252)");
   });
 }
 export function dragstartPlayer(event) {
@@ -259,7 +260,7 @@ export function dragstartPlayer(event) {
     setAbled(elem);
   }
   dragPlayerInfo.possiblePlayerBoard.forEach((pos) => {
-    board.coloringOneBoard("p", pos, "yellow");
+    board.coloringOneBoard("p", pos, "rgb(213 252 252)");
   });
 }
 export function dragendPlayer(event) {

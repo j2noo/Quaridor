@@ -94,6 +94,7 @@ export function createPlayerInfo(id, color) {
 
   let PlayerImgElem = document.createElement("img");
   PlayerImgElem.src = "./images/playerProfile" + color + ".png";
+  PlayerImgElem.decding = "async";
 
   elem.append(playerNameElem);
   elem.append(PlayerImgElem);

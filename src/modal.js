@@ -23,6 +23,9 @@ export function createModal() {
 }
 export function createModalBuffering() {
   let modal = document.createElement("div");
+  let imgBox = document.createElement("img");
+  imgBox.src = "./images/buffering.jpg";
+
   let i = document.createElement("i");
 
   modal.className = "buffering";
@@ -30,8 +33,8 @@ export function createModalBuffering() {
   i.className = "fa-solid fa-magnifying-glass fa-bounce";
   i.className = "fa-regular fa-face-rolling-eyes fa-beat-fade";
 
-  modal.append(i);
-
+  //modal.append(i);
+  modal.append(imgBox);
   document.body.append(modal);
   //modal.classList.add('hidden');
 }

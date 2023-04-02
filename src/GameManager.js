@@ -135,10 +135,10 @@ export function changeTurn(before, after) {
   }
   setAbled(after.getElem()); //현재 플레이어의 토큰 이미지 이벤트 비활성화
 
-  const ComputerLogicDelay = async (time) => {
+  const ComputerLogicDelay = async (computerChoice, time) => {
     await sleep(time); //time ms 후 실행
-    document.querySelector(".buffering").style.display = "none"; //버퍼링모달창 숨김
-    let computerChoice = player2.getComputerChoice(board, player1, player2);
+    document.getElementById("imgcomputer").style.filter = "none";
+    document.getElementById("imgcomputer").src = "./images/computer.png";
     if (computerChoice.select == "move") {
       //움직임 존재
       moveTo(getNowTurn().getPos(), computerChoice, getNowTurn());
@@ -160,8 +160,15 @@ export function changeTurn(before, after) {
 
   if (getNowTurn().getId() == "computer") {
     //컴퓨터 차례
-    document.querySelector(".buffering").style.display = "flex"; //버퍼링 보여주
-    ComputerLogicDelay(1000);
+    let computerChoice = player2.getComputerChoice(board, player1, player2);
+    document.getElementById("imgcomputer").src = "./images/buffering.jpg";
+    if (computerChoice.select == "move") {
+      document.getElementById("imgcomputer").style.filter = "none";
+    } else {
+      document.getElementById("imgcomputer").style.filter = "invert(80%)";
+    }
+
+    ComputerLogicDelay(computerChoice, 1000);
   }
 }
 function moveTo(before, after, who) {

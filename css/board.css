@@ -70,7 +70,22 @@ td.obstacleBoardUnit {
   width: 9vh;
   height: 2.3vh;
 }
-
+@keyframes bgFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+.bgAnimation {
+  background: linear-gradient(137deg, #ff0000, #ffffff);
+  background-size: 400% 400%;
+  animation: bgFlow 2s ease infinite;
+}
 .playerInfo {
   display: inline;
   box-sizing: border-box;

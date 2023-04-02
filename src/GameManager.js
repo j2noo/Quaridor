@@ -118,10 +118,9 @@ export function changeTurn(before, after) {
   dragPlayerInfo.possiblePlayerBoard = board.getPossiblePlayerPos(getNowTurn().getPos()); //플레이어가 이동할 수 있는 위치를 계산
   dragPlayerInfo.possibleObstacleBoard = board.getPossibleObstaclePos(player1, player2); //플레이어가 놓을 수 있는 장애물의 위치를 계산 왜 표시안되지?
 
-  //console.log(dragPlayerInfo.possibleObstacleBoard);
+  document.getElementById(before.getName() + "info").classList.remove("bgAnimation");
+  document.getElementById(after.getName() + "info").classList.add("bgAnimation");
 
-  document.getElementById(before.getName() + "info").style.backgroundColor = "";
-  document.getElementById(after.getName() + "info").style.backgroundColor = "rgb(250 170 170)"; //현재턴표시
   console.log("┌----------" + getNowTurn().getId() + " 턴 시작----------┐");
 
   let beforeObstacles = document.querySelectorAll("." + before.getName() + "Obstacle");

@@ -1,4 +1,5 @@
 import { Queue } from "./FastQueue.js";
+const OBS_COLOR = "#c9a85c";
 export class Board {
   constructor() {
     this._playerBoardArr = Array.from(Array(9), () => Array(9).fill(0));
@@ -27,7 +28,51 @@ export class Board {
   printObstacleBoardArr() {
     console.table(this._obstacleBoardArr);
   }
+  //장애물을 놓았을때 영향을 받는 요소의 id
+  getAdjObstacleBoardUnitId(row, col, dir) {
+    let ret = [];
+    if (dir == "vertical") {
+      ret[0] = "e" + row * 2 + "e" + (col * 2 + 1);
+      ret[1] = "e" + (row * 2 + 2) + "e" + (col * 2 + 1);
+    } else {
+      ret[0] = "e" + (row * 2 + 1) + "e" + col * 2;
+      ret[1] = "e" + (row * 2 + 1) + "e" + (col * 2 + 2);
+    }
+    ret[2] = "o" + row + col;
+    return ret;
+  }
+  coloringAllBoard() {
+    let boardUnits = document.querySelectorAll("td");
+    //모든 보드 색칠 해제
+    boardUnits.forEach((element) => {
+      element.style.background = "";
+    });
 
+    //장애물 색칠
+    for (let i = 0; i < 8; i++) {
+      for (let j = 0; j < 8; j++) {
+        if (this._obstacleBoardArr[i][j] == -1) continue;
+
+        let adj = this.getAdjObstacleBoardUnitId(i, j, this._obstacleBoardArr[i][j]);
+        adj.forEach((element) => {
+          document.getElementById(element).style.backgroundColor = OBS_COLOR;
+        });
+        if (this._obstacleBoardArr[i][j] == "vertical") {
+          document.getElementById(adj[2]).style.borderTopColor = OBS_COLOR;
+          document.getElementById(adj[2]).style.borderBottomColor = OBS_COLOR;
+        } else {
+          document.getElementById(adj[2]).style.borderLeftColor = OBS_COLOR;
+          document.getElementById(adj[2]).style.borderRightColor = OBS_COLOR;
+        }
+      }
+    }
+  }
+  coloringOneBoard(type, pos, color) {
+    document.getElementById("" + type + pos.row + pos.col).style.backgroundColor = color;
+  }
+  coloringObstacleBoard(id, color) {
+    document.getElementById(id).style.backgroundColor = color;
+  }
   isPossibleObstacle(obsInfo, p1, p2, isPrint) {
     // 놓는곳, 좌우/위아래 같은장애물 조사
     let returnInfo = {
@@ -48,9 +93,7 @@ export class Board {
       ],
     };
     if (isPrint) {
-      console.log(
-        `(${obsInfo.row}, ${obsInfo.col})에 ${obsInfo.dir} 장애물 설치`
-      );
+      console.log(`(${obsInfo.row}, ${obsInfo.col})에 ${obsInfo.dir} 장애물 설치`);
     }
     for (let i = 0; i < 3; i++) {
       let newRow = +obsInfo.row + direction[obsInfo.dir][i][0];
@@ -72,16 +115,8 @@ export class Board {
     this.setObstacleBoardArr(obsInfo.row, obsInfo.col, obsInfo.dir); //임시로 설정
 
     let flag = 1;
-    returnInfo.minDepth1 = this.isPlayerReachableBFS(
-      p1,
-      this.getObstacleBoardArr(),
-      0
-    );
-    returnInfo.minDepth2 = this.isPlayerReachableBFS(
-      p2,
-      this.getObstacleBoardArr(),
-      8
-    );
+    returnInfo.minDepth1 = this.isPlayerReachableBFS(p1, this.getObstacleBoardArr(), 0);
+    returnInfo.minDepth2 = this.isPlayerReachableBFS(p2, this.getObstacleBoardArr(), 8);
     if (returnInfo.minDepth1 == false) {
       if (isPrint) {
         console.log("player1이 승리지점에 도달할수없습니다");
@@ -89,9 +124,7 @@ export class Board {
       returnInfo.isPossible = false;
     } else {
       if (isPrint) {
-        console.log(
-          `player1이 승리지점에 ${returnInfo.minDepth1}번 만에 도달합니다`
-        );
+        console.log(`player1이 승리지점에 ${returnInfo.minDepth1}번 만에 도달합니다`);
       }
     }
     if (returnInfo.minDepth2 == false) {
@@ -101,9 +134,7 @@ export class Board {
       returnInfo.isPossible = false;
     } else {
       if (isPrint) {
-        console.log(
-          `player2이 승리지점에 ${returnInfo.minDepth2}번 만에 도달합니다`
-        );
+        console.log(`player2이 승리지점에 ${returnInfo.minDepth2}번 만에 도달합니다`);
       }
     }
 
@@ -135,10 +166,7 @@ export class Board {
           if (!this.isValidIndex(9, newPos.row, newPos.col)) {
             continue;
           }
-          if (
-            visitedArr[newPos.row][newPos.col] == 0 &&
-            this.isPossibleMove(deq, newPos, true, 0)
-          ) {
+          if (visitedArr[newPos.row][newPos.col] == 0 && this.isPossibleMove(deq, newPos, true, 0)) {
             //  미방문이면
 
             queue.enqueue(newPos);
@@ -153,18 +181,14 @@ export class Board {
 
   isPossibleMove(before, after, ignorePlayer, isPrint) {
     //점프 코드를 돌리기 위해 플레이어 무시하고 장애물만 검사
-    if (
-      !this.isValidIndex(9, before.row, before.col) ||
-      !this.isValidIndex(9, after.row, after.col)
-    ) {
+    if (!this.isValidIndex(9, before.row, before.col) || !this.isValidIndex(9, after.row, after.col)) {
       if (isPrint == 1) {
         console.log("before또는 after의 좌표가 유효하지 않습니다.");
       }
       return false;
     }
     //console.log(`(${before.row}, ${before.col})에서 (${after.row}, ${after.col}) `);
-    let distance2 =
-      (after.row - before.row) ** 2 + (after.col - before.col) ** 2;
+    let distance2 = (after.row - before.row) ** 2 + (after.col - before.col) ** 2;
     if (distance2 != 1) {
       //한칸떨어진게 아닌 경우
       if (distance2 == 2 && isPossibleJumpL.call(this, before, after)) {
@@ -209,20 +233,14 @@ export class Board {
       //console.log(mid);
       //console.log(progress);
 
-      if (
-        !this.isValidIndex(9, progress.row, progress.col) ||
-        this.isPossibleMove(mid, progress, true, 0)
-      ) {
+      if (!this.isValidIndex(9, progress.row, progress.col) || this.isPossibleMove(mid, progress, true, 0)) {
         // 진행방향 너머가 인덱스오버가 아니면서 막혀있을떄
         if (isPrint == 1) {
           console.log("플레이어 너머가 맵 밖이거나, I자 점프가 가능하네요");
         }
         return false;
       }
-      return (
-        this.isPossibleMove(before, mid, true, 0) &&
-        this.isPossibleMove(mid, after, true, 0)
-      ); //두개가 가능한 움직임이고,
+      return this.isPossibleMove(before, mid, true, 0) && this.isPossibleMove(mid, after, true, 0); //두개가 가능한 움직임이고,
     }
     function isPossibleJumpI(before, after) {
       //console.table(this._playerBoardArr);
@@ -243,34 +261,20 @@ export class Board {
         return false;
       }
       //console.log(mid.row,mid.col);
-      return (
-        this.isPossibleMove(before, mid, true, 0) &&
-        this.isPossibleMove(mid, after, true, 0)
-      );
+      return this.isPossibleMove(before, mid, true, 0) && this.isPossibleMove(mid, after, true, 0);
       //얘는 ㅜ조건 이거아니면 저거 중에 하나네
     }
 
-    if (
-      this._playerBoardArr[after.row][after.col] != 0 &&
-      ignorePlayer == false
-    ) {
+    if (this._playerBoardArr[after.row][after.col] != 0 && ignorePlayer == false) {
       if (isPrint == 1) {
         console.log("플레이어가 존재합니다");
       }
       return false;
     }
-    let obsLT = this.isValidIndex(8, before.row - 1, before.col - 1)
-      ? this._obstacleBoardArr[before.row - 1][before.col - 1]
-      : "out"; //left,top에 장애물 존재여부(dir)
-    let obsRT = this.isValidIndex(8, before.row - 1, before.col)
-      ? this._obstacleBoardArr[before.row - 1][before.col]
-      : "out"; //left,bottom에 장애물 존재여부(dir)
-    let obsLB = this.isValidIndex(8, before.row, before.col - 1)
-      ? this._obstacleBoardArr[before.row][before.col - 1]
-      : "out"; //right,top에 장애물 존재여부(dir)
-    let obsRB = this.isValidIndex(8, before.row, before.col)
-      ? this._obstacleBoardArr[before.row][before.col]
-      : "out"; //right,bottom에 장애물 존재여부(dir)
+    let obsLT = this.isValidIndex(8, before.row - 1, before.col - 1) ? this._obstacleBoardArr[before.row - 1][before.col - 1] : "out"; //left,top에 장애물 존재여부(dir)
+    let obsRT = this.isValidIndex(8, before.row - 1, before.col) ? this._obstacleBoardArr[before.row - 1][before.col] : "out"; //left,bottom에 장애물 존재여부(dir)
+    let obsLB = this.isValidIndex(8, before.row, before.col - 1) ? this._obstacleBoardArr[before.row][before.col - 1] : "out"; //right,top에 장애물 존재여부(dir)
+    let obsRB = this.isValidIndex(8, before.row, before.col) ? this._obstacleBoardArr[before.row][before.col] : "out"; //right,bottom에 장애물 존재여부(dir)
     //console.log(obsLT, obsRT, obsLB, obsRB);
 
     //아래는 전부 1칸 이동하는 경우
@@ -296,19 +300,31 @@ export class Board {
 
     return true;
   }
+  getPossiblePlayerPos(beforePos) {
+    const dy = [-1, -1, -1, 0, 1, 1, 1, 0, -2, 0, 2, 0]; //대각선1칸 + 상하좌우2칸씩
+    const dx = [-1, 0, 1, 1, 1, 0, -1, -1, 0, 2, 0, -2]; //대각선1칸 + 상하좌우2칸씩
+    let ret = [];
+
+    for (let i = 0; i < 12; i++) {
+      const newPos = {
+        row: beforePos.row + dy[i],
+        col: beforePos.col + dx[i],
+      };
+      //가능한 움직임 확인, 출력없이
+      if (this.isPossibleMove(beforePos, newPos, 0)) {
+        ret.push(newPos);
+      }
+    }
+    return ret;
+  }
   isValidIndex(size, row, col) {
     return !(row < 0 || row >= size || col < 0 || col >= size);
   }
   checkWin(player) {
     //console.log(player);
-    if (
-      (player.getName() == "player1" && player.getPos().row == 0) ||
-      (player.getName() == "player2" && player.getPos().row == 8)
-    ) {
+    if ((player.getName() == "player1" && player.getPos().row == 0) || (player.getName() == "player2" && player.getPos().row == 8)) {
       document.querySelector(".winner").style.display = "flex";
-      document.querySelector(
-        ".winner"
-      ).innerText = `승자는 ${player.getId()}입니다!`;
+      document.querySelector(".winner").innerText = `승자는 ${player.getId()}입니다!`;
     }
   }
 }

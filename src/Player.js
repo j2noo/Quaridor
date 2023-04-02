@@ -12,10 +12,10 @@ export class Player {
         this._elem=null;
         this._id=name;
     }   
-    getName() { return this._name; }
+    getName() { return this._name; } //player1 or player2
     setName() {} //굳이 필요없는대ㅔ?
 
-    getColor() { return this._color; }
+    getColor() { return this._color; }  //player1 or player2 or computer
     setColor() {} //굳이 필요없는대ㅔ?
 
     getLeftObstacles() { return this._leftObstacles ;}

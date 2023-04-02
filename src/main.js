@@ -18,7 +18,7 @@ document.querySelector('.winner').style.display="none"; //버퍼링모달창 숨
 
 let btn1Elem=document.getElementById('btn1');
 let btn2Elem=document.getElementById('btn2');
-btn1Elem.addEventListener('click',gameStartComputer);
+btn1Elem.addEventListener('click',gameStart.bind(null,'vsComputer'));
 btn2Elem.addEventListener('click',gameStart.bind(null,'vsPlayer'));
 
 //gameStart();

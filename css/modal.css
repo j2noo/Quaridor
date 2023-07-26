@@ -2,7 +2,8 @@
 @keyframes bounce {
   100% {
     top: -20px;
-    text-shadow: 0 1px 0 #ccc, 0 2px 0 #ccc, 0 3px 0 #ccc, 0 4px 0 #ccc, 0 5px 0 #ccc, 0 6px 0 #ccc, 0 7px 0 #ccc, 0 8px 0 #ccc, 0 9px 0 #ccc, 0 50px 25px rgba(0, 0, 0, 0.2);
+    text-shadow: 0 1px 0 #ccc, 0 2px 0 #ccc, 0 3px 0 #ccc, 0 4px 0 #ccc, 0 5px 0 #ccc, 0 6px 0 #ccc, 0 7px 0 #ccc,
+      0 8px 0 #ccc, 0 9px 0 #ccc, 0 50px 25px rgba(0, 0, 0, 0.2);
   }
 }
 @keyframes bgFlow {
@@ -66,13 +67,15 @@ button span {
   animation: bounce 0.35s ease infinite alternate;
   font-size: 10em;
   color: #a87e0a;
-  text-shadow: 0 1px 0 #ccc, 0 2px 0 #ccc, 0 3px 0 #ccc, 0 4px 0 #ccc, 0 5px 0 #ccc, 0 6px 0 transparent, 0 7px 0 transparent, 0 8px 0 transparent, 0 9px 0 transparent, 0 10px 10px rgba(0, 0, 0, 0.4);
+  text-shadow: 0 1px 0 #ccc, 0 2px 0 #ccc, 0 3px 0 #ccc, 0 4px 0 #ccc, 0 5px 0 #ccc, 0 6px 0 transparent,
+    0 7px 0 transparent, 0 8px 0 transparent, 0 9px 0 transparent, 0 10px 10px rgba(0, 0, 0, 0.4);
 }
 button span {
   font-size: 35px;
   top: 2px;
   animation: bounce 0.9s ease-in infinite alternate;
-  text-shadow: 0 1px 0 #ccc, 0 1px 0 #ccc, 0 1.5px 0 #ccc, 0 2px 0 #ccc, 0 3px 0 #ccc, 0 2px 0 transparent, 0 3px 0 transparent, 0 4px 0 transparent, 0 5px 0 transparent, 0 1px 1px rgba(0, 0, 0, 0.4);
+  text-shadow: 0 1px 0 #ccc, 0 1px 0 #ccc, 0 1.5px 0 #ccc, 0 2px 0 #ccc, 0 3px 0 #ccc, 0 2px 0 transparent,
+    0 3px 0 transparent, 0 4px 0 transparent, 0 5px 0 transparent, 0 1px 1px rgba(0, 0, 0, 0.4);
   color: #0e24f0;
 }
 #id1 {

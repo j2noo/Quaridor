@@ -16,6 +16,7 @@ export function createBoard() {
   console.log("makingBoard");
   createTable(board);
 }
+
 function createTable(board) {
   for (let i = 0; i < 17; i++) {
     let boardRow = document.createElement("tr");

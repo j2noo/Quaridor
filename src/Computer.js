@@ -99,10 +99,9 @@ export class Computer {
         select: "obs",
       };
     }
+    //모든 위치에 장애물을 놓아서 컴퓨터 vs 플레이어의 이동거리 증가 비교
     function bruteforceObstacle(board, player1, player2) {
-      //모든 위치에 장애물을 놓아서 컴퓨터 vs 플레이어의 이동거리 증가 비교
       let obsBoard = board.getObstacleBoardArr();
-      //console.log(player1,player2);
       let originDistance = {
         player: board.isPlayerReachableBFS(player1, board, 0),
         computer: board.isPlayerReachableBFS(player2, board, 8),
@@ -131,21 +130,17 @@ export class Computer {
               col: j,
               dir: dirArr[k],
             };
-            let obsInfo = board.isPossibleObstacle(obstmp, player1, player2, 0);
+            let obsInfo = board.isPossibleObstacle(obstmp, player1, player2, 0); //이거 중복계산
             if (obsInfo.isPossible == false) {
               //겹침으로 설치 불가능
               continue;
             }
-            let increasePlayerDistance =
-              obsInfo.minDepth1 - originDistance.player;
-            let increaseComputerDistance =
-              obsInfo.minDepth2 - originDistance.computer;
-            let playerFurtherAway =
-              increasePlayerDistance - increaseComputerDistance;
+            let increasePlayerDistance = obsInfo.minDepth1 - originDistance.player;
+            let increaseComputerDistance = obsInfo.minDepth2 - originDistance.computer;
+            let playerFurtherAway = increasePlayerDistance - increaseComputerDistance;
+
             //플레이어와 장애물 거리//17*17 table에서 계산
-            let distacePO =
-              Math.abs(player1.getPos().row * 2 - (i * 2 + 1)) +
-              Math.abs(player1.getPos().col * 2 - (j * 2 + 1));
+            let distacePO = Math.abs(player1.getPos().row * 2 - (i * 2 + 1)) + Math.abs(player1.getPos().col * 2 - (j * 2 + 1));
             //console.log('y거리 : ' + Math.abs(player1.getPos().row*2 - (i*2 +1)));
             //console.log('x거리 : ' + Math.abs(player1.getPos().col*2 - (j*2 +1)));
 
@@ -175,8 +170,8 @@ export class Computer {
       }
       return bestChoice;
     }
+    //컴퓨터(p2)가 처음 이동할 위치 찾기
     function getMoveBFS(board, player1, player2) {
-      //컴퓨터(p2)가 처음 이동할 위치 찾기
       const dy = [1, 0, -1, 0]; //아래,좌,위,우
       const dx = [0, -1, 0, 1];
       const p1Pos = player1.getPos();
@@ -199,10 +194,7 @@ export class Computer {
           continue;
         }
         //첫 상하좌우가 상대편이 아니거, 이동 가능하면
-        if (
-          !(initPos.row == p1Pos.row && initPos.col == p1Pos.col) &&
-          board.isPossibleMove(p2Pos, initPos, true)
-        ) {
+        if (!(initPos.row == p1Pos.row && initPos.col == p1Pos.col) && board.isPossibleMove(p2Pos, initPos, true)) {
           queue.enqueue(initPos);
           continue;
         }
@@ -218,15 +210,7 @@ export class Computer {
           if (initPos2.row == p2Pos.row && initPos2.col == p2Pos.col) {
             continue;
           }
-          console.log(
-            "" +
-              p2Pos.row +
-              p2Pos.col +
-              "에서" +
-              initPos2.row +
-              initPos2.col +
-              "점프"
-          );
+          console.log("" + p2Pos.row + p2Pos.col + "에서" + initPos2.row + initPos2.col + "점프");
 
           if (board.isPossibleMove(p2Pos, initPos2, 0)) {
             queue.enqueue(initPos2);
@@ -257,10 +241,7 @@ export class Computer {
             if (!board.isValidIndex(9, newPos.row, newPos.col)) {
               continue;
             }
-            if (
-              visitedArr[newPos.row][newPos.col] == 0 &&
-              board.isPossibleMove(deq, newPos, true)
-            ) {
+            if (visitedArr[newPos.row][newPos.col] == 0 && board.isPossibleMove(deq, newPos, true)) {
               //  미방문이면
 
               queue.enqueue(newPos);

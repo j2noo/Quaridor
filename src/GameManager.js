@@ -18,7 +18,7 @@ let dragObstacleInfo = {
   imgId: null,
   adj: [], //장애물이 같이 놓이는 칸의 id정보
   isPossible: null,
-};
+};  
 let dragPlayerInfo = {
   //드래그 중인 플레이어 정보
   before: {

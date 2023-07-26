@@ -2,8 +2,6 @@ export function createModal() {
   let modal = document.createElement("div");
   let textBox = document.createElement("span");
   let modalBox = document.createElement("div");
-  let btn1 = document.createElement("button");
-  let btn2 = document.createElement("button");
 
   modal.className = "modal";
 
@@ -17,29 +15,46 @@ export function createModal() {
   }
 
   modalBox.className = "modalBox";
+  /**
+   * 버튼두개
+   */
+  let btn1 = document.createElement("button");
+  let btn2 = document.createElement("button");
 
-  let elem = document.createElement("span");
-  elem.innerHTML = "vs<br>Computer";
-  btn1.append(elem);
+  let outerSpan = document.createElement("span");
+  let innerSpan = document.createElement("span");
+  outerSpan.id = "outerSpan";
+  innerSpan.id = "innerSpan";
+  innerSpan.innerHTML = "vs<br>Computer";
+  outerSpan.append(innerSpan);
+  btn1.append(outerSpan);
 
-  let elem2 = document.createElement("span");
-  elem2.innerHTML = "vs<br>Player";
-  btn2.append(elem2);
+  outerSpan = document.createElement("span");
+  innerSpan = document.createElement("span");
+  outerSpan.id = "outerSpan";
+  innerSpan.id = "innerSpan";
+  innerSpan.innerHTML = "vs<br>Player";
+  outerSpan.append(innerSpan);
+  btn2.append(outerSpan);
 
   btn1.id = "btn1";
   btn2.id = "btn2";
 
   btn1.addEventListener("mouseenter", () => {
-    document.querySelector("#btn1 span").innerHTML = "<br>GO!";
+    document.querySelector("#btn1 span span").innerHTML = "<br>GO!";
+    document.querySelector("#btn1 span span").classList.add("hover");
   });
   btn1.addEventListener("mouseleave", () => {
-    document.querySelector("#btn1 span").innerHTML = "vs<br>Computer";
+    document.querySelector("#btn1 span span").innerHTML = "vs<br>Computer";
+    document.querySelector("#btn1 span span").classList.remove("hover");
   });
   btn2.addEventListener("mouseenter", () => {
-    document.querySelector("#btn2 span").innerHTML = "<br>GO!";
+    document.querySelector("#btn2 span span").innerHTML = "<br>GO!";
+    document.querySelector("#btn2 span span").classList.add("hover");
   });
   btn2.addEventListener("mouseleave", () => {
-    document.querySelector("#btn2 span").innerHTML = "vs<br>Player";
+    document.querySelector("#btn2 span span").innerHTML = "vs<br>Player";
+    document.querySelector("#btn2 span span").classList.remove("hover");
   });
 
   modal.append(textBox);
